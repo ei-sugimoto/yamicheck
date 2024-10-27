@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package job.v1;
+
+option go_package = "github.com/ei-sugimoto/yamicheck/api/gen/job/v1;jobv1";
+
+message CheckRequest {
+  string company_name = 1;
+  int64 hourly_wage = 2;
+  string description = 3;
+}
+
+message CheckResponse {
+  int64 level = 1;
+}
+
+service JobService {
+  rpc Check(CheckRequest) returns (CheckResponse) {}
+}

@@ -20,5 +20,3 @@ jobs:
       - uses: bufbuild/buf-lint-action@v1
         with:
           input: proto
-          config: buf.gen.yaml
-          github_token: ${{ secrets.GITHUB_TOKEN }}

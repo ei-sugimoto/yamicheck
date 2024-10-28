@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Install dependencies
-        run: go mod download
+        run: go mod tidy
         working-directory: ./api
 
       - name: Build
@@ -44,5 +44,6 @@ jobs:
         working-directory: ./api
 
       - name: Run Lint
-        run: go vet ./...
-        working-directory: ./api
+        uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: ./api

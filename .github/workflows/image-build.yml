@@ -49,6 +49,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          context: ./api
+          file: ./api/Dockerfile
           tags: |
             ${{env.REGISTRY}}/${{env.username}}/yamicheck:${{ steps.get-latest-tag.outputs.new_version }}
             ${{env.REGISTRY}}/${{env.username}}/yamicheck:latest

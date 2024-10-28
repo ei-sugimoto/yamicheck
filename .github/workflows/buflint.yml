@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: bufbuild/buf-setup-action@v1
       
@@ -21,3 +21,4 @@ jobs:
         with:
           input: proto
           config: buf.gen.yaml
+          github_token: ${{ secrets.GITHUB_TOKEN }}

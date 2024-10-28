@@ -27,8 +27,10 @@ func checkHourlyWage(job *domain.Job) int {
 		return 1
 	} else if job.HourlyWage <= 5000 {
 		return 2
+	} else if job.HourlyWage <= 7500 {
+		return 3
+	} else {
+		return 4
 	}
-
-	return 3
 
 }

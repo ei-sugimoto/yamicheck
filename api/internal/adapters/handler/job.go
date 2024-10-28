@@ -29,5 +29,9 @@ func (jh *JobHandler) Check(ctx context.Context, req *connect.Request[jobv1.Chec
 	if err != nil {
 		return nil, err
 	}
-	return &connect.Response[jobv1.CheckResponse]{Msg: &jobv1.CheckResponse{Level: int64(res.Integer())}}, nil
+	msg, err := res.String()
+	if err != nil {
+		return nil, err
+	}
+	return &connect.Response[jobv1.CheckResponse]{Msg: &jobv1.CheckResponse{Level: int64(res.Integer()), Message: msg}}, nil
 }

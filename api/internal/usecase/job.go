@@ -1,8 +1,11 @@
 package usecase
 
 import (
+	"os"
+
 	"github.com/ei-sugimoto/yamicheck/api/internal/domain"
 	"github.com/ei-sugimoto/yamicheck/api/internal/ports/inner"
+	"github.com/sashabaranov/go-openai"
 )
 
 type JobServiceImp struct {
@@ -19,5 +22,22 @@ func (s *JobServiceImp) Check(job *domain.Job) (*domain.Level, error) {
 		return nil, err
 	}
 
-	return currentLevel, nil
+	if currentLevel.Integer() == 4 {
+		return currentLevel, nil
+	}
+
+	token := os.Getenv("OPENAI_API_KEY")
+
+	if token == "" {
+		panic("OPENAI_API_KEY is not set")
+	}
+
+	client := openai.NewClient(token)
+	openaiService := NewOpenAIService(client)
+	level, err := openaiService.Inspect(job, currentLevel)
+	if err != nil {
+		return nil, err
+	}
+
+	return level, nil
 }

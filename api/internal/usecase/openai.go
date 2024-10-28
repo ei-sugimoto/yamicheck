@@ -39,7 +39,7 @@ func (s *OpenAIServiceImp) GenerateText() (string, error) {
 }
 
 func (s *OpenAIServiceImp) Inspect(job *domain.Job, preLevel *domain.Level) (*domain.Level, error) {
-	headerStr := "今から、求人情報を共有します。あなたは、この求人情報を参照して犯罪に関わる可能性がある求人かどうかを判断します。判断する基準として、4段階のレベルを設定しています。レベル1は安全、レベル2は警告、レベル3は危険、レベル4は重大です。このチャットの返答については、このチャットの返答については、レベルの数値のみを返答してください。(例:3)\n"
+	headerStr := "今から、求人情報を共有します。あなたは、この求人情報を参照して犯罪に関わる可能性がある求人かどうかを判断します。判断する基準として、4段階のレベルを設定しています。レベル1は安全、レベル2は警告、レベル3は危険、レベル4は重大です。もし、非合法なバイトなどによく使われるキーワードがあった際には、レベルを1段階上げてください。なお、このチャットの返答については、レベルの数値のみを返答してください。(例:3)\n"
 	subHeaderStr := fmt.Sprintf("また求人情報には、事前に精査しており、その結果はすでにレベル%dとして設定されています。なので、このレベル未満の返答はしないようにしてください。\n", preLevel.Integer())
 
 	dangerKeywords := []string{"合法", "たたき", "叩き", "タヌキ", "炊飯器", "かけ子", "掛け", "受け子", "#UD", "出し子"}
@@ -48,7 +48,7 @@ func (s *OpenAIServiceImp) Inspect(job *domain.Job, preLevel *domain.Level) (*do
 	footerStr := "以上です。よろしくお願いします。"
 	content := headerStr + subHeaderStr + KeywordsStr + contentStr + footerStr
 	resp, err := s.Client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
-		Model: openai.GPT3Dot5Turbo,
+		Model: openai.GPT4o,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,

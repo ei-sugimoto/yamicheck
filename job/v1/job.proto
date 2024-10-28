@@ -12,6 +12,7 @@ message CheckRequest {
 
 message CheckResponse {
   int64 level = 1;
+  string message = 2;
 }
 
 service JobService {

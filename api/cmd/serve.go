@@ -13,9 +13,18 @@ import (
 	"github.com/ei-sugimoto/yamicheck/api/gen/job/v1/jobv1connect"
 	"github.com/ei-sugimoto/yamicheck/api/internal/adapters/handler"
 	"github.com/ei-sugimoto/yamicheck/api/internal/usecase"
+	"github.com/joho/godotenv"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
+}
 
 func Serve() {
 	slog.Info("Starting server...")

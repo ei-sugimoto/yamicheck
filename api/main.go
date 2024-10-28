@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	cmd.TmpTask()
+	//cmd.TmpTask()
 	cmd.Serve()
 
 }

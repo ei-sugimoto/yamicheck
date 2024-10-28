@@ -13,18 +13,9 @@ import (
 	"github.com/ei-sugimoto/yamicheck/api/gen/job/v1/jobv1connect"
 	"github.com/ei-sugimoto/yamicheck/api/internal/adapters/handler"
 	"github.com/ei-sugimoto/yamicheck/api/internal/usecase"
-	"github.com/joho/godotenv"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
-
-func init() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
-
-}
 
 func Serve() {
 	slog.Info("Starting server...")
@@ -43,14 +34,28 @@ func Serve() {
 	mux.Handle(grpcreflect.NewHandlerV1(reflector))
 	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))
 
-	slog.Error("Server stopped", "Because:", http.ListenAndServe(":8000", h2c.NewHandler(mux, &http2.Server{})))
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, os.Kill)
-	<-ctx.Done()
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	slog.Info("Shutting down")
-	defer func() {
-		stop()
-		cancel()
+	server := &http.Server{
+		Addr:    ":8000",
+		Handler: h2c.NewHandler(mux, &http2.Server{}),
+	}
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			slog.Error("Server stopped", "Because:", err)
+		}
 	}()
 
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, os.Interrupt, os.Kill)
+	defer stop()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(shutdownCtx); err != nil {
+		slog.Error("Server forced to shutdown:", "error", err)
+	}
+
+	slog.Info("Server exiting")
 }

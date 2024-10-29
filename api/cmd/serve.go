@@ -19,9 +19,11 @@ import (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
+	if os.Getenv("ENV") == "dev" {
+		err := godotenv.Load()
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 

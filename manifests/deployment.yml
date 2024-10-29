@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yamicheck-api
+  namespace: yamicheck
+spec:
+  ports:
+    - port: 8000
+  selector:
+    app: yamicheck-api
+    
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamicheck-api
+  namespace: yamicheck
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamicheck-api
+  template:
+      metadata:
+        labels:
+          app: yamicheck-api
+      spec:
+       containers:
+        - name: yamicheck-api
+          image: ghcr.io/ei-sugimoto/yamicheck:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OPENAPI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: yamicheck-secret
+                  key: OPENAPI_API_KEY

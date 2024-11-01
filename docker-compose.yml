@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - data:/var/lib/postgresql/data
 
@@ -17,11 +17,24 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
     ports:
-      - '8000:8000'
+      - "8000:8000"
     volumes:
       - ./api:/app
     depends_on:
       - db
 
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/app
+      - ./proto:/app/connect-example/proto
+    depends_on:
+      - api
+      - db
+    tty: true
 volumes:
   data:

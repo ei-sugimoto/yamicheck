@@ -37,5 +37,6 @@ services:
       - db
     tty: true
     working_dir: /project/src
+    command: /bin/bash -c "bun install && bun run dev"
 volumes:
   data:

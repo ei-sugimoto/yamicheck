@@ -31,12 +31,11 @@ services:
       - '3000:3000'
     volumes:
       - ./web:/project
-      - ./proto:/project/src/proto
+      # - ./proto:/project/src/proto
     depends_on:
       - api
       - db
     tty: true
-    working_dir: /project/src
-    command: /bin/bash -c "bun install && bun run dev"
+    working_dir: /project
 volumes:
   data:

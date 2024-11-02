@@ -1,3 +1,8 @@
-FROM oven/bun:latest
+FROM debian
 
-CMD ["bash", "-c", "bun dev"]
+RUN apt-get update && apt-get install -y \
+    zip \
+    unzip \
+    curl
+
+RUN curl -fsSL https://bun.sh/install | bash

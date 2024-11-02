@@ -30,12 +30,12 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./web:/project
-      # - ./proto:/project/src/proto
+      - ./web:/app
+      - ./proto:/app/projects/proto
     depends_on:
       - api
       - db
     tty: true
-    working_dir: /project
+    working_dir: /app
 volumes:
   data:
